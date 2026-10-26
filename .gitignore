@@ -5,3 +5,4 @@ covers/
 *.jpg
 *.jpeg
 *.png
+releases/*.json
