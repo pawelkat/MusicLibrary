@@ -1,0 +1,57 @@
+{
+  "artist": "After the Sin",
+  "album": "ECHOES",
+  "date": "2023-02-28",
+  "genre": "Rock / Coldwave / Post-Punk",
+  "language": "eng",
+  "composer": "After the Sin",
+  "publisher": "Bat-Cave Productions",
+  "copyright": "2023 After the Sin",
+  "artist_url": "https://afterthesin.com",
+  "cover_url": "https://i.discogs.com/61N8sbgbYQeMbh86oDTPPV1IjTUB6LMiF_fnY3HZXPA/rs:fit/g:sm/q:90/h:535/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI2NjMx/ODA5LTE2ODIzNDYz/MzYtNDE4MC5qcGVn.jpeg",
+  "comment": "CD album, Bat-Cave Productions BCCD121. Released 28 February 2023, Poland. 4-panel clear-tray digipak; no booklet and no printed lyrics. Genre: Rock. Styles: Coldwave, Post-Punk. Music by After the Sin. Lead composer, vocals, bass and other instruments: Andrzej \"Oland\" Szymko. Vocals, visual design and album cover: Natalia \"Nana\" Kołodziej. Main guitar: Tadeusz \"Thad\" Piekarski. Lyrics: Natalia \"Nana\" Kołodziej (tracks 4, 5, 10, 12); Tonid (tracks 1-3, 6-9, 11). Mix: Hubert Torzewski at Torzewski Studio. Mastering: Erwin Maas at eMastering. Manufactured by Digi Pres. Matrix / runout: 36520 After The Sin - Echoes. Published by Bat-Cave Productions. (c) 2023 After the Sin. Inner panel: thanks to Tonid for being part of the band in the early days. Discogs release 26631809.",
+  "musicians": [
+    ["vocals", "Andrzej \"Oland\" Szymko"],
+    ["bass", "Andrzej \"Oland\" Szymko"],
+    ["other instruments", "Andrzej \"Oland\" Szymko"],
+    ["vocals", "Natalia \"Nana\" Kołodziej"],
+    ["main guitar", "Tadeusz \"Thad\" Piekarski"]
+  ],
+  "links": [
+    {
+      "desc": "DISCOGS",
+      "url": "https://www.discogs.com/release/26631809-After-The-Sin-Echoes"
+    }
+  ],
+  "txxx": {
+    "CATALOGNUMBER": "BCCD121",
+    "LABEL": "Bat-Cave Productions",
+    "RELEASECOUNTRY": "Poland",
+    "MEDIA": "CD",
+    "RELEASETYPE": "Album",
+    "MATRIX": "36520 After The Sin - Echoes",
+    "DISCOGS_RELEASE_ID": "26631809",
+    "LEAD COMPOSER": "Andrzej \"Oland\" Szymko",
+    "MIXER": "Hubert Torzewski",
+    "MIXED AT": "Torzewski Studio",
+    "MASTERING": "Erwin Maas",
+    "MASTERED AT": "eMastering",
+    "ARTWORK": "Natalia \"Nana\" Kołodziej",
+    "MANUFACTURED BY": "Digi Pres",
+    "SCRIPT": "Latn"
+  },
+  "tracks": [
+    {"n": 1, "title": "In My Mind", "youtube_id": "F7-E-c5UaRo", "lyricist": "Tonid"},
+    {"n": 2, "title": "Never The Same", "youtube_id": "-gQFomob_WA", "lyricist": "Tonid"},
+    {"n": 3, "title": "Leaving It All Behind", "youtube_id": "JrREGT9F5mw", "lyricist": "Tonid"},
+    {"n": 4, "title": "Kiss The Glass", "youtube_id": "00yNwI7fsR8", "lyricist": "Natalia \"Nana\" Kołodziej"},
+    {"n": 5, "title": "Lost", "youtube_id": "kUqhGCjkKQ0", "lyricist": "Natalia \"Nana\" Kołodziej"},
+    {"n": 6, "title": "Scrape Myself", "youtube_id": "N2mZXNS-c6I", "lyricist": "Tonid"},
+    {"n": 7, "title": "Fly Again", "youtube_id": "PtPQfvV0MSA", "lyricist": "Tonid"},
+    {"n": 8, "title": "Another World", "youtube_id": "a3cKW6EfFaU", "lyricist": "Tonid"},
+    {"n": 9, "title": "All That Remains", "youtube_id": "oh4JPAl1cV4", "lyricist": "Tonid"},
+    {"n": 10, "title": "For The Fallen", "youtube_id": "rUXnk6zGP0c", "lyricist": "Natalia \"Nana\" Kołodziej"},
+    {"n": 11, "title": "So Bright", "youtube_id": "uzep1J69oTI", "lyricist": "Tonid"},
+    {"n": 12, "title": "Walking On Emptiness", "youtube_id": "a-NjpHxd12E", "lyricist": "Natalia \"Nana\" Kołodziej"}
+  ]
+}
