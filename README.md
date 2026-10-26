@@ -29,4 +29,6 @@ JSON. `tracks[].n` is `1..N` with no gaps. A file matches when its name is alrea
 
 No barcode, ISRC, BPM, or lyric text unless the JSON already has that fact. Do not invent them.
 
-`releases/after-the-sin-echoes.json` is the 2023 CD (Bat-Cave Productions BCCD121, Discogs 26631809) applied on 2026-10-26.
+A file already named `NN - ...` is that track, even when the title text still differs. Filenames drop `? * : " < > | \\`. The title tag keeps those characters. A release JSON may list `discs` with a `folder` for each disc (`TPOS` `n/total`, track numbers restart).
+
+`releases/after-the-sin-echoes.json` is the 2023 CD (Bat-Cave Productions BCCD121, Discogs 26631809). `releases/pink-floyd-the-wall-1994.json` is the 1994 Harvest 2xCD (7243 8 31243 2 9, Discogs 15666613).

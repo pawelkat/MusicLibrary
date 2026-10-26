@@ -51,19 +51,32 @@ def norm(value: str) -> str:
     return "".join(ch for ch in value if ch.isalnum())
 
 
-def load_release(path: Path) -> dict:
-    data = json.loads(path.read_text(encoding="utf-8"))
-    tracks = data.get("tracks") or []
+def check_tracks(tracks: list) -> None:
     if not tracks:
-        raise SystemExit(f"{path} has no tracks")
+        raise SystemExit("a disc has no tracks")
     numbers = [int(track["n"]) for track in tracks]
     if numbers != list(range(1, len(tracks) + 1)):
         raise SystemExit("track n values must be 1..N with no gaps")
+
+
+def load_release(path: Path) -> dict:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if data.get("discs"):
+        for disc in data["discs"]:
+            check_tracks(disc.get("tracks") or [])
+        return data
+    check_tracks(data.get("tracks") or [])
     return data
 
 
+def filename_title(title: str) -> str:
+    # This phone's Music volume rejects ? * : " < > | \ in a name. The tag keeps them.
+    cleaned = "".join(ch for ch in title if ch not in '?*:"<>|\\')
+    return " ".join(cleaned.split())
+
+
 def dest_name(track: dict) -> str:
-    return f"{int(track['n']):02d} - {track['title']}.mp3"
+    return f"{int(track['n']):02d} - {filename_title(track['title'])}.mp3"
 
 
 def find_source(folder: Path, track: dict) -> Path:
@@ -71,6 +84,14 @@ def find_source(folder: Path, track: dict) -> Path:
     numbered = folder / dest_name(track)
     if numbered in files:
         return numbered
+    prefix = f"{int(track['n']):02d} - "
+    prefixed = [path for path in files if path.name.startswith(prefix)]
+    if len(prefixed) == 1:
+        return prefixed[0]
+    if len(prefixed) > 1:
+        raise SystemExit(
+            f"track {track['n']} has {len(prefixed)} files starting with {prefix!r}"
+        )
     hits = []
     youtube_id = track.get("youtube_id") or ""
     needle = norm(track.get("match") or track["title"])
@@ -137,7 +158,7 @@ def write_tags(path: Path, release: dict, track: dict, cover: bytes, total: int)
     tags.add(TDRC(encoding=enc, text=release["date"]))
     add_text(tags, TCON, release.get("genre") or "")
     add_text(tags, TLAN, release.get("language") or "eng")
-    add_text(tags, TCOM, release.get("composer") or release["artist"])
+    add_text(tags, TCOM, track.get("composer") or release.get("composer") or release["artist"])
     add_text(tags, TEXT, track.get("lyricist") or "")
     add_text(tags, TPUB, release.get("publisher") or "")
     add_text(tags, TCOP, release.get("copyright") or "")
@@ -179,6 +200,33 @@ def write_tags(path: Path, release: dict, track: dict, cover: bytes, total: int)
     tags.save(path, v2_version=4)
 
 
+def tag_folder(release: dict, folder: Path, cover: bytes | None, dry_run: bool) -> None:
+    tracks = release["tracks"]
+    planned = []
+    for track in tracks:
+        src = find_source(folder, track)
+        dest = folder / dest_name(track)
+        planned.append((src, dest, track))
+    dests = [dest for _, dest, _ in planned]
+    if len(dests) != len(set(dests)):
+        raise SystemExit("two tracks would use the same filename")
+    for src, dest, track in planned:
+        action = "keep" if src == dest else f"rename -> {dest.name}"
+        print(f"{int(track['n']):02d} {src.name} ({action})")
+    if dry_run:
+        return
+    total = len(tracks)
+    for src, dest, track in planned:
+        write_tags(src, release, track, cover, total)
+    for src, dest, track in planned:
+        if src == dest:
+            continue
+        if dest.exists():
+            raise SystemExit(f"refusing to overwrite {dest}")
+        src.rename(dest)
+        print(f"renamed {dest.name}")
+
+
 def main() -> None:
     args = sys.argv[1:]
     dry_run = False
@@ -204,31 +252,27 @@ def main() -> None:
     if not folder.is_dir():
         raise SystemExit(f"not a directory: {folder}")
     release = load_release(release_path)
-    tracks = release["tracks"]
-    planned = []
-    for track in tracks:
-        src = find_source(folder, track)
-        dest = folder / dest_name(track)
-        planned.append((src, dest, track))
-    dests = [dest for _, dest, _ in planned]
-    if len(dests) != len(set(dests)):
-        raise SystemExit("two tracks would use the same filename")
-    for src, dest, track in planned:
-        action = "keep" if src == dest else f"rename -> {dest.name}"
-        print(f"{int(track['n']):02d} {src.name} ({action})")
-    if dry_run:
-        return
-    cover = cover_bytes(release, cover_arg)
-    total = len(tracks)
-    for src, dest, track in planned:
-        write_tags(src, release, track, cover, total)
-    for src, dest, track in planned:
-        if src == dest:
-            continue
-        if dest.exists():
-            raise SystemExit(f"refusing to overwrite {dest}")
-        src.rename(dest)
-        print(f"renamed {dest.name}")
+    jobs = []
+    if release.get("discs"):
+        for disc in release["discs"]:
+            part = dict(release)
+            part.pop("discs", None)
+            part["disc"] = disc["disc"]
+            part["disc_total"] = disc.get("disc_total") or len(release["discs"])
+            part["tracks"] = disc["tracks"]
+            extra = dict(release.get("txxx") or {})
+            extra.update(disc.get("txxx") or {})
+            part["txxx"] = extra
+            sub = folder / disc["folder"]
+            if not sub.is_dir():
+                raise SystemExit(f"missing disc folder: {sub}")
+            jobs.append((part, sub))
+    else:
+        jobs.append((release, folder))
+    cover = None if dry_run else cover_bytes(release, cover_arg)
+    for part, sub in jobs:
+        print(f"# {sub}")
+        tag_folder(part, sub, cover, dry_run)
 
 
 if __name__ == "__main__":
